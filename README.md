@@ -42,7 +42,7 @@
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/YOUR_USERNAME/ecc-agent-system.git
+git clone https://github.com/ZzXy47/ecc-agent-system.git
 
 # 2. 复制到用户目录
 cp -r ecc-agent-system/* ~/.copilot/
@@ -123,7 +123,7 @@ This is a VS Code Copilot adaptation of ECC (Everything Claude Code). After thre
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/ecc-agent-system.git
+git clone https://github.com/ZzXy47/ecc-agent-system.git
 
 # 2. Copy to user directory
 cp -r ecc-agent-system/* ~/.copilot/
