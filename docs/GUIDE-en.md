@@ -205,11 +205,11 @@ npm install -g lefthook
 
 ## 9. Architecture Audit Reports
 
-This project underwent three rounds of architecture audit:
+This project underwent 10+ rounds of architecture audit. Key rounds:
 
 | Round | File | Score |
 |-------|------|-------|
-| First | `deep-architecture-audit-2026-07-04.md` | 92% |
-| Second | `third-round-audit-2026-07-04.md` | 95% |
+| Deep Audit | `deep-architecture-audit-2026-07-04.md` | 92% |
+| Round 3 | `third-round-audit-2026-07-04.md` | 95% |
 
 Audit coverage: Hook executability, rule injection chain, skill injection chain, hallucination prevention, retry mechanism, tool availability, pipeline gates, GAN workflow.

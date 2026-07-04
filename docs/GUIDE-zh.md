@@ -234,11 +234,11 @@ npm install -g lefthook
 
 ## 九、架构审计报告
 
-本项目经过三轮架构审计：
+本项目经过十余轮架构审计，以下为关键轮次：
 
 | 轮次 | 文件 | 评分 |
 |------|------|------|
-| 第一轮 | `deep-architecture-audit-2026-07-04.md` | 92% |
-| 第二轮 | `third-round-audit-2026-07-04.md` | 95% |
+| 深度审计 | `deep-architecture-audit-2026-07-04.md` | 92% |
+| 第三轮 | `third-round-audit-2026-07-04.md` | 95% |
 
 审计覆盖：Hook 可执行性、规则注入链、Skill 注入链、幻觉防范、重试机制、工具可用性、管道门禁、GAN 工作流。

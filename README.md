@@ -12,9 +12,9 @@
 
 ### 简介
 
-本项目是 ECC（Everything Claude Code）的 VS Code Copilot 适配版本。经过三轮架构审计和修复，将原本的描述性 Agent 系统改造为**可执行的自动化 Agent 编排系统**。
+本项目是 ECC（Everything Claude Code）的 VS Code Copilot 适配版本。经过十余轮架构审计和修复，将原本的描述性 Agent 系统改造为**可执行的自动化 Agent 编排系统**。
 
-**架构评分**: 15% → 95%（三轮累计 +80%）
+**架构评分**: 15% → 95%（十余轮累计 +80%）
 
 ### 系统组成
 
@@ -83,7 +83,7 @@ cd your-project && lefthook install
 本项目基于 **ECC（Everything Claude Code）** 改造，原作者为 **@affaan-m**。
 
 - 原始仓库: [https://github.com/affaan-m/ECC](https://github.com/affaan-m/ECC)
-- 本项目在 ECC 基础上进行了 VS Code Copilot 适配、三轮架构审计、可执行化改造
+- 本项目在 ECC 基础上进行了 VS Code Copilot 适配、十余轮架构审计、可执行化改造
 
 感谢 ECC 项目提供的优秀 Agent 架构设计。
 
@@ -93,9 +93,9 @@ cd your-project && lefthook install
 
 ### Introduction
 
-This is a VS Code Copilot adaptation of ECC (Everything Claude Code). After three rounds of architecture audit and repair, the original descriptive agent system has been transformed into an **executable automated agent orchestration system**.
+This is a VS Code Copilot adaptation of ECC (Everything Claude Code). After 10+ rounds of architecture audit and repair, the original descriptive agent system has been transformed into an **executable automated agent orchestration system**.
 
-**Architecture Score**: 15% → 95% (+80% over three rounds)
+**Architecture Score**: 15% → 95% (+80% over 10+ rounds)
 
 ### System Components
 
@@ -141,7 +141,7 @@ cd your-project && lefthook install
 This project is based on **ECC (Everything Claude Code)** by **@affaan-m**.
 
 - Original repository: [https://github.com/affaan-m/ECC](https://github.com/affaan-m/ECC)
-- This project adapts ECC for VS Code Copilot with three rounds of architecture audit and executable transformation
+- This project adapts ECC for VS Code Copilot with 10+ rounds of architecture audit and executable transformation
 
 Thanks to the ECC project for the excellent agent architecture design.
 
@@ -153,7 +153,7 @@ Thanks to the ECC project for the excellent agent architecture design.
 
 これは ECC（Everything Claude Code）の VS Code Copilot 適用版です。3回のアーキテクチャ監査と修復を経て、元の記述的なエージェントシステムは**実行可能な自動エージェントオーケストレーションシステム**に変換されました。
 
-**アーキテクチャスコア**: 15% → 95%（3ラウンドで +80%）
+**アーキテクチャスコア**: 15% → 95%（10回以上のラウンドで +80%）
 
 ### コンポーネント
 
@@ -180,7 +180,7 @@ Thanks to the ECC project for the excellent agent architecture design.
 
 이 프로젝트는 ECC(Everything Claude Code)의 VS Code Copilot 적용 버전입니다. 3번의 아키텍처 감사와 수정을 통해 원래의 기술적 에이전트 시스템이 **실행 가능한 자동 에이전트 오케스트레이션 시스템**으로 변환되었습니다.
 
-**아키텍처 점수**: 15% → 95% (3라운드에 걸쳐 +80%)
+**아키텍처 점수**: 15% → 95% (10회 이상의 라운드에 걸쳐 +80%)
 
 ### 크레딧
 
