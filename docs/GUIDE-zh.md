@@ -6,22 +6,75 @@
 
 ## 一、系统概述
 
-ECC Agent System 是一个基于 VS Code Copilot 的 AI 编程 Agent 编排系统。它由 70 个专项 Agent、114+ 编码规则、150+ 领域 Skill、6 个质量 Hook 组成，通过 Conductor（总指挥）统一调度。
+ECC Agent System 是一个基于 VS Code Copilot 的 AI 编程 Agent 编排系统。它由 **70 个专项 Agent**（分 9 层架构）、**114+ 编码规则**（覆盖 22 种语言）、**150+ 领域 Skill**、**6 个质量 Hook** 组成，通过 **Conductor（总指挥）** 统一调度。
+
+### 架构总览
 
 ```
 用户请求
   ↓
 Conductor（总指挥）
-  ├→ 任务拆解
-  ├→ Agent 选择（70 个中匹配）
-  ├→ Rule 注入（114+ 规则自动匹配）
-  ├→ Skill 注入（150+ Skill 按需加载）
+  ├→ 任务分析 → 语言/框架检测
+  ├→ 任务拆解 → 子任务列表
+  ├→ Agent 选择（从 70 个中匹配，9 层架构）
+  │   ├→ 审查层（22 Agent）
+  │   ├→ 构建修复层（10 Agent）
+  │   ├→ 质量层（5 Agent）
+  │   ├→ 架构层（6 Agent）
+  │   ├→ 测试层（3 Agent）
+  │   ├→ 安全层（2 Agent）
+  │   ├→ GAN 层（3 Agent）
+  │   └→ 运维层（9 Agent）
+  ├→ Rule 注入（114+ 规则，按语言自动匹配）
+  ├→ Skill 注入（150+ Skill，按任务类型加载）
   ├→ 执行（runSubagent 调度）
   ├→ 质量门禁（6 个 Hook）
+  │   ├→ gateguard — 编辑/写入前事实收集
+  │   ├→ safety-guard — 危险命令拦截
+  │   ├→ delivery-gate — 7 项交付质量门禁
+  │   ├→ pre-commit — 代码质量检查
+  │   ├→ commit-msg — 提交信息格式验证
+  │   └→ pre-push — 推送前验证
   └→ 交付
 ```
 
-## 二、Conductor 使用
+## 二、Agent 分层架构
+
+### 9 层分类总览
+
+70 个 Agent 按职责分为 9 层，Conductor 根据任务类型自动选择合适的 Agent 组合：
+
+| 层级 | 职责 | 数量 | 代表 Agent |
+|------|------|------|-----------|
+| 编排层 | 中央任务调度 | 1 | `conductor` |
+| 审查层 | 代码审查（按语言/框架细分） | 22 | `code-reviewer`、`typescript-reviewer`、`python-reviewer`、`react-reviewer`、`vue-reviewer`、`go-reviewer`、`rust-reviewer`、`java-reviewer`、`cpp-reviewer`、`flutter-reviewer`、`database-reviewer`、`fastapi-reviewer`、`django-reviewer`、`mle-reviewer`、`healthcare-reviewer` |
+| 构建修复层 | 编译/构建错误修复 | 10 | `build-error-resolver`、`go-build-resolver`、`cpp-build-resolver`、`rust-build-resolver`、`java-build-resolver`、`kotlin-build-resolver`、`swift-build-resolver`、`dart-build-resolver`、`react-build-resolver`、`django-build-resolver`、`pytorch-build-resolver`、`harmonyos-app-resolver` |
+| 质量层 | 代码质量检查与优化 | 5 | `code-simplifier`、`silent-failure-hunter`、`comment-analyzer`、`refactor-cleaner`、`type-design-analyzer` |
+| 架构层 | 系统架构设计与分析 | 6 | `architect`、`code-architect`、`code-explorer`、`network-architect`、`a11y-architect`、`homelab-architect` |
+| 测试层 | 测试策略与执行 | 3 | `tdd-guide`、`e2e-runner`、`pr-test-analyzer` |
+| 安全层 | 安全评估与漏洞检测 | 2 | `security-reviewer`、`RedTeam-Expert` |
+| GAN 层 | GAN 工作流（需求→产品） | 3 | `gan-planner`、`gan-generator`、`gan-evaluator` |
+| 运维层 | 专项运维 | 9 | `doc-updater`、`performance-optimizer`、`seo-specialist`、`marketing-agent`、`pr-manager`、`loop-operator`、`harness-optimizer`、`conversation-analyzer`、`spec-miner` |
+
+### 审查层细分（22 个审查 Agent）
+
+审查层按语言/框架细分，确保每个领域都有专业审查者：
+
+**语言审查**：`typescript-reviewer`、`python-reviewer`、`go-reviewer`、`rust-reviewer`、`java-reviewer`、`kotlin-reviewer`、`cpp-reviewer`、`csharp-reviewer`、`swift-reviewer`、`php-reviewer`、`fsharp-reviewer`
+
+**框架审查**：`react-reviewer`、`vue-reviewer`、`flutter-reviewer`、`django-reviewer`、`fastapi-reviewer`
+
+**通用审查**：`code-reviewer`（通用）、`database-reviewer`（数据库）、`mle-reviewer`（机器学习）、`healthcare-reviewer`（医疗）
+
+### 构建修复层细分（10 个构建 Agent）
+
+每个构建修复 Agent 专注于特定语言/框架的编译错误：
+
+`build-error-resolver`（TS/JS 通用）、`go-build-resolver`、`cpp-build-resolver`、`rust-build-resolver`、`java-build-resolver`、`kotlin-build-resolver`、`swift-build-resolver`、`dart-build-resolver`、`react-build-resolver`、`django-build-resolver`、`pytorch-build-resolver`、`harmonyos-app-resolver`
+
+---
+
+## 三、Conductor 使用
 
 ### 2.1 触发 Conductor
 
@@ -60,7 +113,7 @@ Conductor（总指挥）
 | Bug 修复 | `silent-failure-hunter` | "请用 silent-failure-hunter 找出静默失败" |
 | 测试编写 | `tdd-guide` | "请用 tdd-guide 用 TDD 方式开发" |
 
-## 三、Hook 系统
+## 四、Hook 系统
 
 ### 3.1 Hook 说明
 
@@ -92,7 +145,7 @@ git commit --no-verify -m "fix: 紧急修复"
 HUSKY=0 git commit -m "..."
 ```
 
-## 四、编码规则系统
+## 五、编码规则系统
 
 ### 4.1 规则位置
 
@@ -121,7 +174,7 @@ Conductor 会根据任务涉及的语言/框架自动注入对应规则：
 
 在 `~/.claude/rules/` 下创建新目录和文件即可添加自定义规则。
 
-## 五、添加新 Agent
+## 六、添加新 Agent
 
 ### 5.1 Agent 文件格式
 
@@ -156,7 +209,7 @@ description: 一句话描述 Agent 的功能和使用场景
 - **可执行指令** — 使用具体工具调用，不要只写描述
 - **输出格式** — 明确输出格式，便于 Conductor 解析
 
-## 六、GAN 工作流
+## 七、GAN 工作流
 
 ### 6.1 概述
 
@@ -183,7 +236,7 @@ gan-planner（规划）→ gan-generator（实现）→ gan-evaluator（评估�
 └── gan-features/        # gan-generator 的功能实现
 ```
 
-## 七、迁移指南
+## 八、迁移指南
 
 ### 7.1 从一台电脑迁移到另一台
 
@@ -211,7 +264,7 @@ npm install -g lefthook
 - `.copilot/.backup/` 包含修复前的备份，可选择性迁移
 - lefthook 需要在新电脑单独安装
 
-## 八、故障排除
+## 九、故障排除
 
 ### 8.1 Agent 不响应
 
@@ -232,7 +285,7 @@ npm install -g lefthook
 2. 检查目标 Agent 文件是否存在
 3. 查看 VS Code 输出面板的错误信息
 
-## 九、架构审计报告
+## 十、架构审计报告
 
 本项目经过十余轮架构审计，以下为关键轮次：
 
