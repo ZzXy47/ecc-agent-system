@@ -6,7 +6,7 @@
 
 ## 一、系统概述
 
-ECC Agent System 是一个基于 VS Code Copilot 的 AI 编程 Agent 编排系统。它由 70 个专项 Agent、106+ 编码规则、150+ 领域 Skill、6 个质量 Hook 组成，通过 Conductor（总指挥）统一调度。
+ECC Agent System 是一个基于 VS Code Copilot 的 AI 编程 Agent 编排系统。它由 70 个专项 Agent、114+ 编码规则、150+ 领域 Skill、6 个质量 Hook 组成，通过 Conductor（总指挥）统一调度。
 
 ```
 用户请求
@@ -14,7 +14,7 @@ ECC Agent System 是一个基于 VS Code Copilot 的 AI 编程 Agent 编排系�
 Conductor（总指挥）
   ├→ 任务拆解
   ├→ Agent 选择（70 个中匹配）
-  ├→ Rule 注入（106+ 规则自动匹配）
+  ├→ Rule 注入（114+ 规则自动匹配）
   ├→ Skill 注入（150+ Skill 按需加载）
   ├→ 执行（runSubagent 调度）
   ├→ 质量门禁（6 个 Hook）

@@ -22,7 +22,7 @@
 |------|------|------|
 | 编排层 | Conductor 总指挥 | 1 |
 | Agent 层 | 专项能力 Agent | 70 |
-| Rule 层 | 编码规范规则 | 106+ |
+| Rule 层 | 编码规范规则 | 114+ |
 | Skill 层 | 领域知识 Skill | 150+ |
 | Hook 层 | 质量门禁 Hook | 6 |
 | Command 层 | 用户入口命令 | 93+ |
@@ -32,7 +32,7 @@
 
 - ✅ **可执行调度** — Conductor 使用 `runSubagent` 实际调度 70 个子 Agent
 - ✅ **可执行 Hook** — 6 个质量门禁使用 `grep_search`/`read_file`/`run_in_terminal` 实际执行
-- ✅ **规则注入** — 根据语言/框架自动注入 106+ 编码规则
+- ✅ **规则注入** — 根据语言/框架自动注入 114+ 编码规则
 - ✅ **Skill 注入** — 根据任务类型自动加载 150+ 领域知识
 - ✅ **幻觉防范** — 可执行的事实验证流程
 - ✅ **重试机制** — 3 次重试 + fallback 降级链
@@ -66,7 +66,7 @@ cd your-project && lefthook install
 ├── lefthook.yml     # Git Hooks 配置
 └── state/           # 运行时状态（自动创建）
 
-~/.claude/rules/ecc/ # 106+ 编码规范规则
+~/.claude/rules/ecc/ # 114+ 编码规范规则
 ├── angular/
 ├── csharp/
 ├── golang/
@@ -103,7 +103,7 @@ This is a VS Code Copilot adaptation of ECC (Everything Claude Code). After 10+ 
 |-------|-----------|-------|
 | Orchestration | Conductor (Central Dispatcher) | 1 |
 | Agent Layer | Specialized Capability Agents | 70 |
-| Rule Layer | Coding Standard Rules | 106+ |
+| Rule Layer | Coding Standard Rules | 114+ |
 | Skill Layer | Domain Knowledge Skills | 150+ |
 | Hook Layer | Quality Gate Hooks | 6 |
 | Command Layer | User Entry Commands | 93+ |
@@ -113,7 +113,7 @@ This is a VS Code Copilot adaptation of ECC (Everything Claude Code). After 10+ 
 
 - ✅ **Executable Dispatch** — Conductor uses `runSubagent` to actually dispatch 70 sub-agents
 - ✅ **Executable Hooks** — 6 quality gates use `grep_search`/`read_file`/`run_in_terminal` for actual execution
-- ✅ **Rule Injection** — Auto-injects 106+ coding rules based on language/framework
+- ✅ **Rule Injection** — Auto-injects 114+ coding rules based on language/framework
 - ✅ **Skill Injection** — Auto-loads 150+ domain knowledge skills based on task type
 - ✅ **Hallucination Prevention** — Executable fact-verification workflow
 - ✅ **Retry Mechanism** — 3 retries + fallback degradation chain
@@ -151,7 +151,7 @@ Thanks to the ECC project for the excellent agent architecture design.
 
 ### 概要
 
-これは ECC（Everything Claude Code）の VS Code Copilot 適用版です。3回のアーキテクチャ監査と修復を経て、元の記述的なエージェントシステムは**実行可能な自動エージェントオーケストレーションシステム**に変換されました。
+これは ECC（Everything Claude Code）の VS Code Copilot 適用版です。10回以上のアーキテクチャ監査と修復を経て、元の記述的なエージェントシステムは**実行可能な自動エージェントオーケストレーションシステム**に変換されました。
 
 **アーキテクチャスコア**: 15% → 95%（10回以上のラウンドで +80%）
 
@@ -161,7 +161,7 @@ Thanks to the ECC project for the excellent agent architecture design.
 |---------|---------------|-----|
 | オーケストレーション | Conductor（中央ディスパッチャー） | 1 |
 | エージェント層 | 専門能力エージェント | 70 |
-| ルール層 | コーディング標準ルール | 106+ |
+| ルール層 | コーディング標準ルール | 114+ |
 | スキル層 | ドメイン知識スキル | 150+ |
 | フック層 | 品質ゲートフック | 6 |
 | コマンド層 | ユーザーエントリコマンド | 93+ |
@@ -178,7 +178,7 @@ Thanks to the ECC project for the excellent agent architecture design.
 
 ### 개요
 
-이 프로젝트는 ECC(Everything Claude Code)의 VS Code Copilot 적용 버전입니다. 3번의 아키텍처 감사와 수정을 통해 원래의 기술적 에이전트 시스템이 **실행 가능한 자동 에이전트 오케스트레이션 시스템**으로 변환되었습니다.
+이 프로젝트는 ECC(Everything Claude Code)의 VS Code Copilot 적용 버전입니다. 10회 이상의 아키텍처 감사와 수정을 통해 원래의 기술적 에이전트 시스템이 **실행 가능한 자동 에이전트 오케스트레이션 시스템**으로 변환되었습니다.
 
 **아키텍처 점수**: 15% → 95% (10회 이상의 라운드에 걸쳐 +80%)
 

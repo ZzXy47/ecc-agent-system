@@ -6,7 +6,7 @@
 
 ## 1. System Overview
 
-ECC Agent System is an AI programming agent orchestration system for VS Code Copilot. It consists of 70 specialized agents, 106+ coding rules, 150+ domain skills, and 6 quality hooks, orchestrated by the Conductor (central dispatcher).
+ECC Agent System is an AI programming agent orchestration system for VS Code Copilot. It consists of 70 specialized agents, 114+ coding rules, 150+ domain skills, and 6 quality hooks, orchestrated by the Conductor (central dispatcher).
 
 ```
 User Request
@@ -14,7 +14,7 @@ User Request
 Conductor (Central Dispatcher)
   ├→ Task Decomposition
   ├→ Agent Selection (from 70 agents)
-  ├→ Rule Injection (106+ rules auto-matched)
+  ├→ Rule Injection (114+ rules auto-matched)
   ├→ Skill Injection (150+ skills loaded on demand)
   ├→ Execution (runSubagent dispatch)
   ├→ Quality Gates (6 hooks)
