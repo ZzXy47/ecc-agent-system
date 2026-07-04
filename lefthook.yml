@@ -1,0 +1,255 @@
+# ECC Git Hooks Configuration
+# 使用 lefthook 管理 Git Hooks
+# 文档: https://github.com/evilmartians/lefthook
+
+# 颜色输出
+colors:
+  cyan: "\033[36m"
+  green: "\033[32m"
+  red: "\033[31m"
+  yellow: "\033[33m"
+  reset: "\033[0m"
+
+# Pre-commit Hook
+pre-commit:
+  parallel: true
+  commands:
+    # 禁止提交的字符串扫描
+    forbidden-patterns:
+      glob: "*.{ts,tsx,js,jsx,py,go,rs,java,kt,swift,rb,php}"
+      run: |
+        echo "🔍 扫描禁止提交的模式..."
+        # 检查调试代码
+        if grep -rn "console\.log\|debugger\|alert(" {staged_files} 2>/dev/null; then
+          echo "❌ 发现调试代码，请删除后重新提交"
+          exit 1
+        fi
+        # 检查硬编码密码
+        if grep -rn "password=\|secret=\|api_key=\|token=" {staged_files} 2>/dev/null; then
+          echo "❌ 发现硬编码密码/密钥，请使用环境变量"
+          exit 1
+        fi
+        # 检查 @ts-ignore（无注释）
+        if grep -rn "@ts-ignore" {staged_files} 2>/dev/null | grep -v "//.*@ts-ignore"; then
+          echo "❌ 发现无注释的 @ts-ignore，请添加说明"
+          exit 1
+        fi
+        echo "✅ 禁止模式检查通过"
+      stage_fixed: true
+
+    # 大文件检测
+    large-files:
+      glob: "*"
+      run: |
+        echo "📦 检查大文件..."
+        for file in {staged_files}; do
+          size=$(wc -c < "$file" 2>/dev/null || echo 0)
+          if [ "$size" -gt 1048576 ]; then
+            echo "⚠️  大文件警告: $file ($((size / 1024 / 1024))MB)"
+          fi
+        done
+        echo "✅ 大文件检查完成"
+      stage_fixed: true
+
+    # 代码格式化检查
+    prettier:
+      glob: "*.{ts,tsx,js,jsx,css,scss,json,md}"
+      run: |
+        if command -v prettier &> /dev/null; then
+          echo "🎨 检查代码格式..."
+          prettier --check {staged_files} || echo "⚠️  请运行 prettier --write 格式化代码"
+        fi
+      stage_fixed: true
+
+    eslint:
+      glob: "*.{ts,tsx,js,jsx}"
+      run: |
+        if command -v eslint &> /dev/null; then
+          echo "📋 检查 ESLint..."
+          eslint {staged_files} || echo "⚠️  请修复 ESLint 错误"
+        fi
+      stage_fixed: true
+
+    ruff:
+      glob: "*.py"
+      run: |
+        if command -v ruff &> /dev/null; then
+          echo "🐍 检查 Python 代码..."
+          ruff check {staged_files} || echo "⚠️  请修复 Python 代码错误"
+        fi
+      stage_fixed: true
+
+    gofmt:
+      glob: "*.go"
+      run: |
+        if command -v gofmt &> /dev/null; then
+          echo "🔧 检查 Go 格式..."
+          gofmt -l {staged_files} | while read file; do
+            echo "⚠️  格式不正确: $file"
+          done
+        fi
+      stage_fixed: true
+
+    rustfmt:
+      glob: "*.rs"
+      run: |
+        if command -v rustfmt &> /dev/null; then
+          echo "🦀 检查 Rust 格式..."
+          rustfmt --check {staged_files} || echo "⚠️  请运行 rustfmt 格式化代码"
+        fi
+      stage_fixed: true
+
+# Commit Message Hook
+commit-msg:
+  commands:
+    # Conventional Commits 格式验证
+    conventional-commits:
+      run: |
+        echo "📝 验证提交信息格式..."
+        msg_file="{0}"
+        if [ -f "$msg_file" ]; then
+          msg=$(cat "$msg_file")
+        else
+          msg="$1"
+        fi
+        
+        # 检查格式: <type>(<scope>): <description>
+        if ! echo "$msg" | grep -qE "^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert)(\(.+\))?: .+"; then
+          echo "❌ 提交信息格式错误"
+          echo ""
+          echo "正确格式: <type>(<scope>): <description>"
+          echo ""
+          echo "有效 type: feat, fix, docs, style, refactor, perf, test, chore, ci, revert"
+          echo ""
+          echo "示例: feat(auth): add OAuth2 login support"
+          exit 1
+        fi
+        
+        # 检查标题长度
+        title=$(echo "$msg" | head -1)
+        if [ ${#title} -gt 72 ]; then
+          echo "❌ 提交标题过长 (${#title} > 72 字符)"
+          echo "请缩短标题"
+          exit 1
+        fi
+        
+        # 检查禁止 WIP
+        if echo "$msg" | grep -qE "^WIP:|^wip:"; then
+          echo "❌ 不允许 WIP 提交"
+          echo "请完成工作后提交"
+          exit 1
+        fi
+        
+        echo "✅ 提交信息格式正确"
+
+# Pre-Push Hook
+pre-push:
+  parallel: true
+  commands:
+    # 类型检查
+    type-check:
+      run: |
+        echo "🔍 运行类型检查..."
+        # TypeScript
+        if [ -f "tsconfig.json" ]; then
+          if command -v tsc &> /dev/null; then
+            tsc --noEmit || echo "⚠️  TypeScript 类型检查失败"
+          fi
+        fi
+        # Python
+        if [ -f "pyproject.toml" ] || [ -f "setup.cfg" ]; then
+          if command -v mypy &> /dev/null; then
+            mypy . || echo "⚠️  Python 类型检查失败"
+          fi
+        fi
+        # Go
+        if [ -f "go.mod" ]; then
+          if command -v go &> /dev/null; then
+            go vet ./... || echo "⚠️  Go 类型检查失败"
+          fi
+        fi
+        echo "✅ 类型检查完成"
+
+    # Lint 检查
+    lint:
+      run: |
+        echo "📋 运行 Lint 检查..."
+        # JavaScript/TypeScript
+        if [ -f ".eslintrc" ] || [ -f ".eslintrc.js" ] || [ -f ".eslintrc.json" ]; then
+          if command -v eslint &> /dev/null; then
+            eslint . || echo "⚠️  ESLint 检查失败"
+          fi
+        fi
+        # Python
+        if [ -f "pyproject.toml" ] || [ -f "setup.cfg" ]; then
+          if command -v ruff &> /dev/null; then
+            ruff check . || echo "⚠️  Ruff 检查失败"
+          fi
+        fi
+        # Go
+        if [ -f "go.mod" ]; then
+          if command -v golangci-lint &> /dev/null; then
+            golangci-lint run || echo "⚠️  Go Lint 检查失败"
+          fi
+        fi
+        echo "✅ Lint 检查完成"
+
+    # 构建验证
+    build:
+      run: |
+        echo "🔨 运行构建验证..."
+        # Node.js
+        if [ -f "package.json" ]; then
+          if grep -q '"build"' package.json; then
+            npm run build || echo "⚠️  构建失败"
+          fi
+        fi
+        # Python
+        if [ -f "pyproject.toml" ]; then
+          if command -v python &> /dev/null; then
+            python -m build || echo "⚠️  Python 构建失败"
+          fi
+        fi
+        # Go
+        if [ -f "go.mod" ]; then
+          if command -v go &> /dev/null; then
+            go build ./... || echo "⚠️  Go 构建失败"
+          fi
+        fi
+        echo "✅ 构建验证完成"
+
+    # 单元测试
+    test:
+      run: |
+        echo "🧪 运行单元测试..."
+        # Node.js
+        if [ -f "package.json" ]; then
+          if grep -q '"test"' package.json; then
+            npm test || echo "⚠️  测试失败"
+          fi
+        fi
+        # Python
+        if [ -f "pyproject.toml" ] || [ -f "setup.cfg" ]; then
+          if command -v pytest &> /dev/null; then
+            pytest || echo "⚠️  Python 测试失败"
+          fi
+        fi
+        # Go
+        if [ -f "go.mod" ]; then
+          if command -v go &> /dev/null; then
+            go test ./... || echo "⚠️  Go 测试失败"
+          fi
+        fi
+        echo "✅ 单元测试完成"
+
+# 配置说明
+# 使用方法:
+# 1. 安装 lefthook: brew install lefthook (macOS) 或 npm install -g lefthook
+# 2. 在项目根目录运行: lefthook install
+# 3. 配置会自动生效
+#
+# 跳过 Hook:
+# - 跳过 pre-commit: git commit --no-verify
+# - 跳过特定检查: LEFTHOOK_EXCLUDE=forbidden-patterns git commit
+#
+# 查看 Hook 状态: lefthook version

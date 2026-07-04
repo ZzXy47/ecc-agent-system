@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Backup (pre-repair snapshots)
+.backup/
+
+# Runtime state (per-machine, don't sync)
+state/
+
+# Logs
+*.log
+
+# Editor swap files
+*.swp
+*.swo
+*~
