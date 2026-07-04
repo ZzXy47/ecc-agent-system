@@ -2,7 +2,7 @@
 
 > **A production-ready AI coding agent orchestration system for VS Code Copilot**
 > 
-> 基于 [Everything Claude Code (ECC)](https://github.com/nicobailon/everything-claude-code) 改造的 VS Code Copilot 专用 Agent 编排系统
+> 基于 [Everything Claude Code (ECC)](https://github.com/affaan-m/ECC) 改造的 VS Code Copilot 专用 Agent 编排系统
 
 [English](#english) | [中文](#中文) | [日本語](#日本語) | [한국어](#한국어)
 
@@ -80,9 +80,9 @@ cd your-project && lefthook install
 
 ### 致谢
 
-本项目基于 **ECC（Everything Claude Code）** 改造，原作者为 **@nicobailon**。
+本项目基于 **ECC（Everything Claude Code）** 改造，原作者为 **@affaan-m**。
 
-- 原始仓库: [https://github.com/nicobailon/everything-claude-code](https://github.com/nicobailon/everything-claude-code)
+- 原始仓库: [https://github.com/affaan-m/ECC](https://github.com/affaan-m/ECC)
 - 本项目在 ECC 基础上进行了 VS Code Copilot 适配、三轮架构审计、可执行化改造
 
 感谢 ECC 项目提供的优秀 Agent 架构设计。
@@ -138,9 +138,9 @@ cd your-project && lefthook install
 
 ### Credits
 
-This project is based on **ECC (Everything Claude Code)** by **@nicobailon**.
+This project is based on **ECC (Everything Claude Code)** by **@affaan-m**.
 
-- Original repository: [https://github.com/nicobailon/everything-claude-code](https://github.com/nicobailon/everything-claude-code)
+- Original repository: [https://github.com/affaan-m/ECC](https://github.com/affaan-m/ECC)
 - This project adapts ECC for VS Code Copilot with three rounds of architecture audit and executable transformation
 
 Thanks to the ECC project for the excellent agent architecture design.
@@ -168,9 +168,9 @@ Thanks to the ECC project for the excellent agent architecture design.
 
 ### クレジット
 
-本プロジェクトは **@nicobailon** による **ECC（Everything Claude Code）** をベースとしています。
+本プロジェクトは **@affaan-m** による **ECC（Everything Claude Code）** をベースとしています。
 
-- 原始リポジトリ: [https://github.com/nicobailon/everything-claude-code](https://github.com/nicobailon/everything-claude-code)
+- 原始リポジトリ: [https://github.com/affaan-m/ECC](https://github.com/affaan-m/ECC)
 
 ---
 
@@ -184,9 +184,9 @@ Thanks to the ECC project for the excellent agent architecture design.
 
 ### 크레딧
 
-이 프로젝트는 **@nicobailon** 의 **ECC(Everything Claude Code)**를 기반으로 합니다.
+이 프로젝트는 **@affaan-m** 의 **ECC(Everything Claude Code)**를 기반으로 합니다。
 
-- 원본 저장소: [https://github.com/nicobailon/everything-claude-code](https://github.com/nicobailon/everything-claude-code)
+- 원본 저장소: [https://github.com/affaan-m/ECC](https://github.com/affaan-m/ECC)
 
 ---
 
@@ -194,4 +194,4 @@ Thanks to the ECC project for the excellent agent architecture design.
 
 MIT License — See [LICENSE](LICENSE) for details.
 
-Based on [ECC (Everything Claude Code)](https://github.com/nicobailon/everything-claude-code) by @nicobailon.
+Based on [ECC (Everything Claude Code)](https://github.com/affaan-m/ECC) by @affaan-m.
