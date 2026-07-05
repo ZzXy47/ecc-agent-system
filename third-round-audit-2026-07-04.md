@@ -19,7 +19,7 @@
 
 | 检查项 | 结果 | 证据 |
 |--------|------|------|
-| Conductor 使用 runSubagent | ✅ | 51 处引用 |
+| Conductor 使用 agent | ✅ | 51 处引用 |
 | 有并行调度示例 | ✅ | 示例 2 展示并行调用 |
 | 有串行调度示例 | ✅ | 示例 3 展示依赖链 |
 | 有任务信封格式 | ✅ | 阶段 3 详细定义 |
@@ -117,9 +117,9 @@
 
 | 检查项 | 结果 | 证据 |
 |--------|------|------|
-| Gate 1 — 计划批准 | ✅ | runSubagent("architect") |
-| Gate 2 — 提交确认 | ✅ | runSubagent("code-reviewer") |
-| Gate 3 — 交付确认 | ✅ | runSubagent("security-reviewer") |
+| Gate 1 — 计划批准 | ✅ | agent("architect") |
+| Gate 2 — 提交确认 | ✅ | agent("code-reviewer") |
+| Gate 3 — 交付确认 | ✅ | agent("security-reviewer") |
 | 失败处理 | ✅ | 最多 2-3 次重试 |
 | Conductor 引用 | ✅ | 7 处门禁引用 |
 
@@ -133,9 +133,9 @@
 
 | 检查项 | 结果 | 证据 |
 |--------|------|------|
-| gan-planner 调度 | ✅ | runSubagent 调用 |
-| gan-generator 调度 | ✅ | runSubagent 调用 |
-| gan-evaluator 调度 | ✅ | runSubagent 调用 |
+| gan-planner 调度 | ✅ | agent 调用 |
+| gan-generator 调度 | ✅ | agent 调用 |
+| gan-evaluator 调度 | ✅ | agent 调用 |
 | 状态文件传递 | ✅ | gan-spec.md / gan-feedback.md |
 | 迭代反馈循环 | ✅ | 最多 3 轮迭代 |
 | 门禁检查 | ✅ | 4 项 GAN 门禁 |
@@ -167,7 +167,7 @@
 
 | 断裂点 | 第二轮状态 | 第三轮验证 | 证据 |
 |--------|-----------|-----------|------|
-| 理解 → 调度 | ✅ 已修复 | ✅ 确认 | 51 处 runSubagent 引用 |
+| 理解 → 调度 | ✅ 已修复 | ✅ 确认 | 51 处 agent 引用 |
 | Agent → Rule | ✅ 已修复 | ✅ 确认 | 18 处规则注入引用 |
 | Hook → 执行 | ✅ 已修复 | ✅ 确认 | 6 个 Hook 均有可执行工具调用 |
 | Agent → Agent | ✅ 已修复 | ✅ 确认 | 11 处状态文件引用 |

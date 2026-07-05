@@ -11,7 +11,7 @@
 
 | 缺陷 | 等级 | 状态 | 修复方案 |
 |------|------|------|----------|
-| P0-1: 无 Agent 调度引擎 | P0 | ✅ 已修复 | Conductor 使用 `runSubagent` 实际调度 |
+| P0-1: 无 Agent 调度引擎 | P0 | ✅ 已修复 | Conductor 使用 `agent` 实际调度 |
 | P0-2: 无 Hook 执行引擎 | P0 | ✅ 已修复 | Hook 改造为可执行检查（grep/read/terminal） |
 | P0-3: 无 Agent 间状态传递 | P0 | ✅ 已修复 | 文件状态传递机制（`.copilot/state/`） |
 | P1-1: Rule 系统非选择性加载 | P1 | ✅ 已修复 | Conductor 规则注入机制 |
@@ -24,7 +24,7 @@
 **逻辑链断裂修复**:
 | 断裂点 | 状态 | 修复方案 |
 |--------|------|----------|
-| 理解 → 调度 | ✅ 已修复 | `runSubagent` 实际调度 |
+| 理解 → 调度 | ✅ 已修复 | `agent` 实际调度 |
 | Agent → Rule | ✅ 已修复 | 规则注入机制 |
 | Hook → 执行 | ✅ 已修复 | 可执行 Hook 检查 |
 | Agent → Agent | ✅ 已修复 | 文件状态传递 |
@@ -78,7 +78,7 @@
 
 **影响**: Conductor 描述了调度模式但没有执行引擎。如同乐谱没有乐队。
 
-**根因**: VS Code Copilot 的 `runSubagent` 工具存在，但 Agent 的 YAML `agents:` 字段只是元数据，不启用调度。大多数 Agent 的 `agents: []` — 它们不引用子 Agent。
+**根因**: VS Code Copilot 的 `agent` 工具存在，但 Agent 的 YAML `agents:` 字段只是元数据，不启用调度。大多数 Agent 的 `agents: []` — 它们不引用子 Agent。
 
 #### P0-2: 无 Hook 执行引擎
 
@@ -270,7 +270,7 @@ Agent: 依赖自己的训练知识（而非最新 Skill 内容）
 | `create_file` | ✅ 可用 | 创建文件 |
 | `replace_string_in_file` | ✅ 可用 | 编辑文件 |
 | `run_in_terminal` | ✅ 可用 | 执行命令 |
-| `runSubagent` | ✅ 可用 | 启动子 Agent |
+| `agent` | ✅ 可用 | 启动子 Agent |
 | `grep_search` | ✅ 可用 | 搜索文件 |
 | `manage_todo_list` | ✅ 可用 | 任务管理 |
 | `memory` | ✅ 可用 | 记忆系统 |
@@ -279,7 +279,7 @@ Agent: 依赖自己的训练知识（而非最新 Skill 内容）
 
 | 断裂点 | 说明 |
 |--------|------|
-| `runSubagent` 不被 Agent 使用 | Agent 不引用子 Agent，不使用 runSubagent |
+| `agent` 不被 Agent 使用 | Agent 不引用子 Agent，不使用 agent |
 | Hook 不拦截工具调用 | GateGuard 描述拦截但不实际拦截 |
 | Rule 不按文件类型加载 | applyTo 模式不被 VS Code Copilot 执行 |
 | Skill 不自动加载 | Agent 必须手动 read_file |
@@ -292,7 +292,7 @@ Agent: 依赖自己的训练知识（而非最新 Skill 内容）
 
 | 兜底机制 | 状态 | 说明 |
 |----------|------|------|
-| Delivery Gate 重试 | ✅ 可执行 | 最多 3 轮重试，使用 runSubagent 返回子代理修复 |
+| Delivery Gate 重试 | ✅ 可执行 | 最多 3 轮重试，使用 agent 返回子代理修复 |
 | Safety Guard 拦截 | ✅ 可执行 | grep_search 检测危险模式，要求 CONFIRM 确认 |
 | 幻觉防范模板 | ✅ 可执行 | 分发前嵌入验证要求，聚合后使用 grep_search/file_search 验证 |
 | 重试机制模板 | ✅ 可执行 | 3 次重试，每次增加错误上下文，超限降级 |
@@ -348,7 +348,7 @@ ECC v2.0.0 经过两轮修复后，已从**设计精良但执行引擎缺失**�
 
 - **设计层面**: 70 个 Agent、150+ Skills、106+ Rules、6 Hooks、93+ Commands — 覆盖全面
 - **执行层面**: 
-  - ✅ Conductor 使用 `runSubagent` 实际调度
+  - ✅ Conductor 使用 `agent` 实际调度
   - ✅ Hook 改造为可执行检查（grep/read/terminal）
   - ✅ 文件状态传递机制（`.copilot/state/conductor/`）
   - ✅ 规则注入机制（语言→规则映射）
@@ -390,7 +390,7 @@ ECC 从**没有操作系统的应用程序**升级为**有操作系统但需要�
 ### 当前可用性
 
 ECC 现在可以作为**自动化执行系统**使用：
-- Conductor 使用 `runSubagent` 实际调度子 Agent
+- Conductor 使用 `agent` 实际调度子 Agent
 - Hook 系统使用可执行工具调用进行质量门控
 - 状态传递通过文件机制实现
 - 规则和 Skill 通过注入机制加载

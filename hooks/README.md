@@ -4,7 +4,7 @@
 
 Hooks 是 ECC 的自动化检查机制，在关键节点自动执行验证，确保代码质量和安全。
 
-**执行模式**: 所有 Hook 均为**可执行模式**（`enforcement: executable`），使用 `grep_search`、`read_file`、`run_in_terminal`、`runSubagent` 等工具实际执行检查，而非仅描述性检查。
+**执行模式**: 所有 Hook 均为**可执行模式**（`enforcement: executable`），使用 `grep_search`、`read_file`、`run_in_terminal`、`agent` 等工具实际执行检查，而非仅描述性检查。
 
 ## Hook 列表
 
@@ -12,7 +12,7 @@ Hooks 是 ECC 的自动化检查机制，在关键节点自动执行验证，确
 |------|---------|---------|------|
 | `gateguard` | Edit/Write/Bash 前 | 硬阻断 | 事实强制门控 — grep_search + read_file |
 | `safety-guard` | 危险命令检测 | 硬阻断 | 破坏性操作拦截 — grep_search 模式匹配 |
-| `delivery-gate` | 任务交付前 | 硬阻断 | 质量门禁 — runSubagent + run_in_terminal |
+| `delivery-gate` | 任务交付前 | 硬阻断 | 质量门禁 — agent + run_in_terminal |
 | `pre-commit` | git commit 前 | 软阻断 | 代码质量检查 — grep_search + run_in_terminal |
 | `commit-msg` | 提交信息生成后 | 软阻断 | 格式验证 — grep_search 正则匹配 |
 | `pre-push` | git push 前 | 软阻断 | 推送前验证 — run_in_terminal |
@@ -44,7 +44,7 @@ hooks/
 | `grep_search` | 模式匹配搜索 | 禁止字符串检测、危险命令检测、格式验证 |
 | `read_file` | 读取文件内容 | 依赖分析、API 提取、结构检查 |
 | `run_in_terminal` | 执行终端命令 | 类型检查、Lint、构建、测试 |
-| `runSubagent` | 调用子 Agent | 代码审查、安全检查、质量评估 |
+| `agent` | 调用子 Agent | 代码审查、安全检查、质量评估 |
 | `file_search` | 文件路径搜索 | 文件存在性验证 |
 
 ## 与 Agent 的关系
@@ -52,7 +52,7 @@ hooks/
 - Hooks 定义了"何时检查"和"检查什么"
 - Agent 定义了"如何执行"检查逻辑
 - Conductor 负责协调 hooks 和 agents 的执行
-- 所有 Hook 检查结果通过 `runSubagent` 返回给 Conductor
+- 所有 Hook 检查结果通过 `agent` 返回给 Conductor
 
 ## 使用方式
 

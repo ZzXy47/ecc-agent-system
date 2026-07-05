@@ -8,7 +8,7 @@
 
 ---
 
-## 可执行检查流程（使用 runSubagent 和 run_in_terminal 实际执行）
+## 可执行检查流程（使用 agent 和 run_in_terminal 实际执行）
 
 ### Gate 1: 测试通过
 
@@ -26,7 +26,7 @@ run_in_terminal(
 ### Gate 2: 审查通过
 
 ```
-runSubagent(
+agent(
   agentName: "code-reviewer",
   prompt: "审查以下变更文件的代码质量：{变更文件清单}",
   description: "Code quality review"
@@ -38,7 +38,7 @@ runSubagent(
 ### Gate 3: 安全通过
 
 ```
-runSubagent(
+agent(
   agentName: "security-reviewer",
   prompt: "安全检查以下变更文件：{变更文件清单}",
   description: "Security review"
@@ -88,7 +88,7 @@ run_in_terminal(
 ## 不通过的处理
 
 如果任一项失败：
-1. 使用 `runSubagent` 返回对应的子代理修复
+1. 使用 `agent` 返回对应的子代理修复
 2. 修复后重新运行全部检查
 3. **最多重试 3 轮**
 4. 3 轮后仍未通过 → 标记失败，生成详细的不通过报告
@@ -108,8 +108,8 @@ Conductor: 所有任务完成，开始 Delivery Gate 检查
 
 [并行执行]
 run_in_terminal("npm test") → ✅ 0 失败
-runSubagent("code-reviewer") → ✅ 无 CRITICAL/HIGH
-runSubagent("security-reviewer") → ✅ 无 CRITICAL 漏洞
+agent("code-reviewer") → ✅ 无 CRITICAL/HIGH
+agent("security-reviewer") → ✅ 无 CRITICAL 漏洞
 run_in_terminal("npm run build") → ✅ 0 错误
 run_in_terminal("tsc --noEmit") → ✅ 0 错误
 GateGuard 记录 → ✅ 全部有记录

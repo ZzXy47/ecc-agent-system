@@ -27,7 +27,7 @@ Conductor (Central Dispatcher)
   │   └→ Operations Layer (9 Agents)
   ├→ Rule Injection (114+ rules, auto-matched by language)
   ├→ Skill Injection (150+ skills, loaded by task type)
-  ├→ Execution (runSubagent dispatch)
+  ├→ Execution (agent dispatch)
   ├→ Quality Gates (6 hooks)
   │   ├→ gateguard — Fact-gathering before edit/write
   │   ├→ safety-guard — Destructive command interception

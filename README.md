@@ -63,7 +63,7 @@
 
 ### 核心特性
 
-- ✅ **可执行调度** — Conductor 使用 `runSubagent` 实际调度 70 个子 Agent
+- ✅ **可执行调度** — Conductor 使用 `agent` 实际调度 70 个子 Agent
 - ✅ **可执行 Hook** — 6 个质量门禁使用 `grep_search`/`read_file`/`run_in_terminal` 实际执行
 - ✅ **规则注入** — 根据语言/框架自动注入 114+ 编码规则（覆盖 22 种语言）
 - ✅ **Skill 注入** — 根据任务类型自动加载 150+ 领域知识
@@ -165,7 +165,7 @@ This is a VS Code Copilot adaptation of ECC (Everything Claude Code). After **10
 
 ### Core Features
 
-- ✅ **Executable Dispatch** — Conductor uses `runSubagent` to actually dispatch 70 sub-agents
+- ✅ **Executable Dispatch** — Conductor uses `agent` to actually dispatch 70 sub-agents
 - ✅ **Executable Hooks** — 6 quality gates use `grep_search`/`read_file`/`run_in_terminal` for actual execution
 - ✅ **Rule Injection** — Auto-injects 114+ coding rules based on language/framework (22 languages covered)
 - ✅ **Skill Injection** — Auto-loads 150+ domain knowledge skills based on task type
@@ -267,7 +267,7 @@ Thanks to the ECC project for the excellent agent architecture design.
 
 ### コア機能
 
-- ✅ **実行可能ディスパッチ** — Conductor は `runSubagent` を使用して70個のサブエージェントを実際にディスパッチ
+- ✅ **実行可能ディスパッチ** — Conductor は `agent` を使用して70個のサブエージェントを実際にディスパッチ
 - ✅ **実行可能フック** — 6個の品質ゲートが `grep_search`/`read_file`/`run_in_terminal` で実際に実行
 - ✅ **ルール注入** — 言語/フレームワークに基づいて114+のコーディングルールを自動注入（22言語対応）
 - ✅ **スキル注入** — タスクタイプに基づいて150+のドメイン知識スキルを自動ロード
@@ -369,7 +369,7 @@ ECCプロジェクトの優れたエージェントアーキテクチャ設計�
 
 ### 핵심 기능
 
-- ✅ **실행 가능한 디스패치** — Conductor는 `runSubagent`를 사용하여 70개의 서브 에이전트를 실제로 디스패치
+- ✅ **실행 가능한 디스패치** — Conductor는 `agent`를 사용하여 70개의 서브 에이전트를 실제로 디스패치
 - ✅ **실행 가능한 훅** — 6개의 품질 게이트가 `grep_search`/`read_file`/`run_in_terminal`로 실제로 실행
 - ✅ **규칙 주입** — 언어/프레임워크에 따라 114+ 코딩 규칙을 자동 주입 (22개 언어 지원)
 - ✅ **스킬 주입** — 태스크 유형에 따라 150+ 도메인 지식 스킬을 자동 로드

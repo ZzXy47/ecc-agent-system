@@ -6,7 +6,7 @@ model:
   - Auto (copilot)
 target: vscode
 user-invocable: true
-tools: [vscode, execute, read, agent, vscode.mermaid-markdown-features, MermaidChart.vscode-mermaid-chart, ms-azuretools.vscode-containers, ms-python.python, vscjava.vscode-java-debug, edit, search, web, browser, 'github/*', 'pylance-mcp-server/*', todo, runSubagent, manage_todo_list, create_file, read_file, grep_search, file_search, run_in_terminal, memory]
+tools: [vscode, execute, read, agent, vscode.mermaid-markdown-features, MermaidChart.vscode-mermaid-chart, ms-azuretools.vscode-containers, ms-python.python, vscjava.vscode-java-debug, edit, search, web, browser, 'github/*', 'pylance-mcp-server/*', todo, manage_todo_list, create_file, read_file, grep_search, file_search, run_in_terminal, vscode/memory]
 agents:
   - name: a11y-architect
     description: Accessibility Architect specializing in WCAG 2.2 compliance for Web and Native platforms
@@ -301,14 +301,14 @@ argument-hint: <目标描述>
 
 ## 核心调度机制（Executable Dispatch Protocol）
 
-> **关键设计**：Conductor 使用 VS Code Copilot 的 `runSubagent` 工具**实际调度**子 Agent，而非仅描述调度行为。
+> **关键设计**：Conductor 使用 VS Code Copilot 的 `agent` 工具**实际调度**子 Agent，而非仅描述调度行为。
 
 ### 调用格式
 
-对于每个子任务，conductor **必须**使用 `runSubagent` 工具调用：
+对于每个子任务，conductor **必须**使用 `agent` 工具调用：
 
 ```
-runSubagent(
+agent(
   agentName: "目标代理名称",
   prompt: "任务信封内容",
   description: "简短任务描述（3-5词）"
@@ -317,9 +317,9 @@ runSubagent(
 
 ### 并行调度规则
 
-- 独立任务 **必须** 在同一 tool call block 中并行调用多个 `runSubagent`
+- 独立任务 **必须** 在同一 tool call block 中并行调用多个 `agent`
 - 有依赖关系的任务必须串行执行（前置任务完成后再分发后续任务）
-- 最大并行度：同一 block 中最多 5 个 `runSubagent` 调用
+- 最大并行度：同一 block 中最多 5 个 `agent` 调用
 
 ### 结果解析流程
 
@@ -341,7 +341,7 @@ create_file(
 )
 
 // 后续任务读取状态文件
-runSubagent(
+agent(
   agentName: "...",
   prompt: "前置结果在 .copilot/state/conductor/task-{id}-result.md 中，请先读取..."
 )
@@ -380,7 +380,7 @@ const ruleMap = {
 read_file(filePath: ".claude/rules/ecc/{lang}/coding-style.md", startLine: 1, endLine: 100)
 
 // Step 3: 将规则摘要注入任务信封
-runSubagent(
+agent(
   agentName: "{目标代理}",
   prompt: "## 任务目标\n{...}\n\n## 适用规则（必须遵循）\n{规则文件内容摘要}\n\n## 期望输出\n{...}",
   description: "{任务描述}"
@@ -416,7 +416,7 @@ const skillMap = {
 read_file(filePath: ".copilot/skills/{skill-name}/SKILL.md", startLine: 1, endLine: 80)
 
 // Step 3: 将 Skill 摘要注入任务信封
-runSubagent(
+agent(
   agentName: "{目标代理}",
   prompt: "## 任务目标\n{...}\n\n## 相关领域知识（参考）\n{Skill 文件内容摘要}\n\n## 期望输出\n{...}",
   description: "{任务描述}"
@@ -440,7 +440,7 @@ runSubagent(
 
 ```
 // 在任务信封中嵌入验证要求
-runSubagent(
+agent(
   agentName: "{目标代理}",
   prompt: "## 任务目标\n{...}\n\n## 验证要求（必须执行）\n1. 所有代码片段必须来自实际文件，使用 read_file 验证\n2. 所有文件路径必须使用 file_search 验证存在\n3. 所有 API 签名必须从源码中读取，不凭记忆\n4. 所有版本号必须从 package.json/requirements.txt 等读取\n5. 输出前必须交叉验证：至少 2 个独立来源确认关键信息\n\n## 期望输出\n{...}",
   description: "{任务描述}"
@@ -462,7 +462,7 @@ grep_search(
 file_search(query: "{返回结果中的文件路径}")
 
 // Step 3: 如果验证失败，要求子 Agent 重新执行
-runSubagent(
+agent(
   agentName: "{目标代理}",
   prompt: "你的输出包含未经验证的信息。请使用 read_file/grep_search/file_search 验证以下内容后重新输出：\n{需要验证的内容列表}",
   description: "Re-verify hallucination"
@@ -492,7 +492,7 @@ manage_todo_list(todoList: [
 ])
 
 // 第一次执行
-runSubagent(
+agent(
   agentName: "{目标代理}",
   prompt: "{任务信封}",
   description: "{任务描述}"
@@ -504,7 +504,7 @@ manage_todo_list(todoList: [
   ...
 ])
 // Step 2: 重新分发（增加错误上下文）
-runSubagent(
+agent(
   agentName: "{目标代理}",
   prompt: "## 前次执行失败\n{前次错误信息}\n\n## 任务目标\n{原始任务信封}\n\n## 修正要求\n请避免前次错误，使用以下策略：\n{修正策略}",
   description: "Retry: {任务描述}"
@@ -536,7 +536,7 @@ runSubagent(
 // 核心工具（始终可用，无需检查）:
 // - read_file / create_file / replace_string_in_file
 // - grep_search / file_search
-// - manage_todo_list / runSubagent
+// - manage_todo_list / agent
 // - run_in_terminal
 
 // 扩展工具（需要运行时检查）:
@@ -580,13 +580,13 @@ run_in_terminal(
 
 **问题**: orch-pipeline 的 Gate 1（计划批准）和 Gate 2（提交确认）是描述性的。
 
-**解决方案**: Conductor 使用 `runSubagent` 实际执行门禁检查。
+**解决方案**: Conductor 使用 `agent` 实际执行门禁检查。
 
 **Gate 1 — 计划批准（Plan Approval Gate）**:
 
 ```
-// 在规划阶段完成后，使用 runSubagent 执行计划审查
-runSubagent(
+// 在规划阶段完成后，使用 agent 执行计划审查
+agent(
   agentName: "architect",
   prompt: "审查以下开发计划的架构合理性：\n{planner 返回的计划}\n\n审查要点：\n1. 架构设计是否合理\n2. 任务分解是否恰当\n3. 依赖关系是否正确\n4. 风险评估是否充分\n\n输出格式：APPROVE / REJECT / REVISE（附修改建议）",
   description: "Plan approval gate"
@@ -599,8 +599,8 @@ runSubagent(
 **Gate 2 — 提交确认（Commit Confirmation Gate）**:
 
 ```
-// 在代码实现完成后，使用 runSubagent 执行代码审查
-runSubagent(
+// 在代码实现完成后，使用 agent 执行代码审查
+agent(
   agentName: "code-reviewer",
   prompt: "审查以下代码变更的质量：\n{变更文件清单}\n\n审查要点：\n1. 代码质量\n2. 测试覆盖\n3. 安全性\n4. 性能影响\n\n输出格式：APPROVE / REJECT / REVISE（附修改建议）",
   description: "Commit confirmation gate"
@@ -613,8 +613,8 @@ runSubagent(
 **Gate 3 — 交付确认（Delivery Confirmation Gate）**:
 
 ```
-// 在所有任务完成后，使用 runSubagent 执行最终审查
-runSubagent(
+// 在所有任务完成后，使用 agent 执行最终审查
+agent(
   agentName: "security-reviewer",
   prompt: "最终安全审查：\n{所有变更文件}\n\n审查要点：\n1. 安全漏洞\n2. 敏感数据泄露\n3. 认证/授权问题\n4. OWASP Top 10\n\n输出格式：APPROVE / REJECT（附修复建议）",
   description: "Delivery confirmation gate"
@@ -655,14 +655,14 @@ manage_todo_list(todoList: [
 
 ## 工作流程
 
-Conductor 将自动执行以下阶段（每个阶段使用 `runSubagent` 实际调度）：
+Conductor 将自动执行以下阶段（每个阶段使用 `agent` 实际调度）：
 
 1. **理解** — 解析目标，提出关键澄清问题
-2. **设计** — 使用 `runSubagent("planner", ...)` 委托规划，使用 `runSubagent("architect", ...)` 评审架构
-3. **分发** — 使用 `runSubagent("agentName", taskEnvelope)` 分发给专项 Agent，并行执行
+2. **设计** — 使用 `agent("planner", ...)` 委托规划，使用 `agent("architect", ...)` 评审架构
+3. **分发** — 使用 `agent("agentName", taskEnvelope)` 分发给专项 Agent，并行执行
 4. **监控** — 使用 `manage_todo_list` 追踪进度，处理失败和停滞
-5. **聚合** — 收集所有 `runSubagent` 返回结果，消除冲突，验证完整性
-6. **交付** — 使用 `runSubagent("code-reviewer", ...)` 和 `runSubagent("security-reviewer", ...)` 执行质量门禁，生成交付报告
+5. **聚合** — 收集所有 `agent` 返回结果，消除冲突，验证完整性
+6. **交付** — 使用 `agent("code-reviewer", ...)` 和 `agent("security-reviewer", ...)` 执行质量门禁，生成交付报告
 
 ---
 
@@ -748,7 +748,7 @@ Conductor 将自动执行以下阶段（每个阶段使用 `runSubagent` 实际�
 
 **示例 1 — 单任务分发**：
 ```
-runSubagent(
+agent(
   agentName: "typescript-reviewer",
   prompt: "审查 src/auth/login.ts 的类型安全和异步正确性。项目路径: /Volumes/CanonA001/2026.7.4",
   description: "TypeScript code review"
@@ -758,17 +758,17 @@ runSubagent(
 **示例 2 — 并行分发（独立任务）**：
 ```
 // 同一 tool call block 中并行调用
-runSubagent(
+agent(
   agentName: "typescript-reviewer",
   prompt: "审查 src/auth/login.ts 的类型安全",
   description: "TypeScript review"
 )
-runSubagent(
+agent(
   agentName: "security-reviewer",
   prompt: "安全检查 src/auth/login.ts 的认证逻辑",
   description: "Security review"
 )
-runSubagent(
+agent(
   agentName: "tdd-guide",
   prompt: "为 src/auth/login.ts 编写单元测试",
   description: "Write unit tests"
@@ -778,7 +778,7 @@ runSubagent(
 **示例 3 — 串行分发（有依赖）**：
 ```
 // 第一步：规划
-runSubagent(
+agent(
   agentName: "planner",
   prompt: "为用户认证系统制定开发计划，包括登录、注册、密码重置",
   description: "Create development plan"
@@ -789,7 +789,7 @@ create_file(
   content: "{planner 返回的计划}"
 )
 // 第二步：基于规划结果分发实现任务
-runSubagent(
+agent(
   agentName: "build-error-resolver",
   prompt: "根据 .copilot/state/conductor/plan-result.md 中的计划，实现登录功能",
   description: "Implement login feature"
@@ -826,13 +826,13 @@ runSubagent(
 
 ### 聚合工作流
 
-1. **收集** — 所有 `runSubagent` 调用返回结果后，解析每个返回消息
+1. **收集** — 所有 `agent` 调用返回结果后，解析每个返回消息
 2. **解析** — 将每个子代理的返回结果转换为上述聚合条目格式
 3. **状态提取** — 从返回结果中提取状态关键词（PASS/FAIL/PARTIAL/成功/失败/部分完成）
 4. **冲突检测** — 按照「阶段 3B — 并行冲突解决协议」执行四层冲突检测
 5. **消解** — 对检测到的冲突执行自动消解或人工介入
 6. **合并** — 将所有无冲突的产出合并为统一结果
-7. **验证** — 使用 `runSubagent("code-reviewer", ...)` 运行合并验证
+7. **验证** — 使用 `agent("code-reviewer", ...)` 运行合并验证
 7. **报告** — 生成最终聚合报告
 
 **注意**：当存在并行执行时，冲突解决必须严格遵循阶段 3B 的四层协议。串行执行时仅需检查逻辑矛盾和风格一致性。
@@ -1307,16 +1307,16 @@ grep_search(
 
 **触发条件**: 所有任务完成，准备交付
 
-**可执行检查流程（使用 runSubagent 实际执行）**:
+**可执行检查流程（使用 agent 实际执行）**:
 
 ```
 // 并行执行质量检查
-runSubagent(
+agent(
   agentName: "code-reviewer",
   prompt: "审查以下变更文件的代码质量：{变更文件清单}",
   description: "Code quality review"
 )
-runSubagent(
+agent(
   agentName: "security-reviewer",
   prompt: "安全检查以下变更文件：{变更文件清单}",
   description: "Security review"
@@ -1339,15 +1339,15 @@ run_in_terminal(
 
 **检查清单（全部必须 PASS）**:
 - [ ] 测试通过: 运行完整测试套件，0 失败
-- [ ] 审查通过: `runSubagent("code-reviewer", ...)` 返回无 CRITICAL/HIGH 发现
-- [ ] 安全通过: `runSubagent("security-reviewer", ...)` 返回无 CRITICAL 漏洞
+- [ ] 审查通过: `agent("code-reviewer", ...)` 返回无 CRITICAL/HIGH 发现
+- [ ] 安全通过: `agent("security-reviewer", ...)` 返回无 CRITICAL 漏洞
 - [ ] 构建通过: `run_in_terminal` 构建命令返回 0 错误
 - [ ] 类型通过: `run_in_terminal` 类型检查命令返回 0 错误
 - [ ] GateGuard 通过: 所有任务分发前都有 GateGuard 检查记录
 - [ ] Safety Guard 通过: 无被绕过的危险操作
 
 **不通过的处理**: 
-如果任一项失败 → 使用 `runSubagent` 返回对应的子代理修复 → 修复后重新运行全部检查
+如果任一项失败 → 使用 `agent` 返回对应的子代理修复 → 修复后重新运行全部检查
 最多重试 3 轮。3 轮后仍未通过 → 标记失败，生成详细的不通过报告
 
 **通过门槛**: 全部 7 项 PASS 后才能交付。单项 PARTIAL 不视为 PASS。
@@ -1458,20 +1458,20 @@ run_in_terminal(
 
 当目标代理不可用或执行失败时：
 
-1. **第一 fallback** — 使用 `runSubagent` 调用对应的 prompt 文件中的行为规格直接执行
-2. **第二 fallback** — 使用 `runSubagent` 调用最相关的 skill 文件指导执行
+1. **第一 fallback** — 使用 `agent` 调用对应的 prompt 文件中的行为规格直接执行
+2. **第二 fallback** — 使用 `agent` 调用最相关的 skill 文件指导执行
 3. **第三 fallback** — 记录失败并报告，请求人工介入
 
 **可执行 Fallback 示例**：
 ```
 // 如果 planner 不可用，降级为直接执行规划逻辑
-runSubagent(
+agent(
   agentName: "planner",
   prompt: "为 {目标} 制定开发计划...",
   description: "Create development plan"
 )
 // 如果 planner 失败，使用 code-architect 作为 fallback
-runSubagent(
+agent(
   agentName: "code-architect",
   prompt: "为 {目标} 设计架构方案...",
   description: "Architecture design fallback"
@@ -1482,11 +1482,11 @@ runSubagent(
 
 ## 代理健康检查（可执行）
 
-分发前使用 `runSubagent` 检查目标代理：
+分发前使用 `agent` 检查目标代理：
 
 ```
 // 使用 Explore agent 检查代理文件是否存在
-runSubagent(
+agent(
   agentName: "Explore",
   prompt: "检查 /Users/jh/.copilot/agents/{代理名}.agent.md 是否存在，是否有行为规格（行数 > 20）",
   description: "Agent health check"
@@ -1535,7 +1535,7 @@ GAN（Generative Adversarial Network）工作流由三个 Agent 组成：
 
 ```
 // Step 1: gan-planner 生成产品规格
-runSubagent(
+agent(
   agentName: "gan-planner",
   prompt: "将以下需求扩展为完整产品规格：\n{用户需求}\n\n输出格式：\n1. 功能清单（按优先级排序）\n2. 每个功能的验收标准\n3. 技术栈建议\n4. 里程碑计划\n\n将结果写入 .copilot/state/conductor/gan-spec.md",
   description: "GAN product specification"
@@ -1548,14 +1548,14 @@ create_file(
 )
 
 // Step 3: gan-generator 按规格实现（迭代循环）
-runSubagent(
+agent(
   agentName: "gan-generator",
   prompt: "根据以下产品规格实现功能：\n规格文件：.copilot/state/conductor/gan-spec.md\n\n实现要求：\n1. 按优先级顺序实现\n2. 每个功能完成后写入 .copilot/state/conductor/gan-features/{feature-name}.md\n3. 运行开发服务器确认可用\n\n如需参考 evaluator 反馈，读取 .copilot/state/conductor/gan-feedback.md",
   description: "GAN feature implementation"
 )
 
 // Step 4: gan-evaluator 测试并评分
-runSubagent(
+agent(
   agentName: "gan-evaluator",
   prompt: "测试以下应用并评分：\n规格文件：.copilot/state/conductor/gan-spec.md\n实现状态：.copilot/state/conductor/gan-features/\n\n评估要求：\n1. 使用 Playwright 测试核心用户路径\n2. 对照规格中的验收标准逐项评分\n3. 将评分和改进建议写入 .copilot/state/conductor/gan-feedback.md\n\n评分格式：\n- 功能完整性: X/10\n- 用户体验: X/10\n- 代码质量: X/10\n- 测试覆盖: X/10\n- 总分: X/40",
   description: "GAN quality evaluation"
@@ -1574,14 +1574,14 @@ read_file(
 
 // 如果总分 < 30/40，进入下一轮迭代
 // 将 feedback 注入 generator 的下一轮 prompt
-runSubagent(
+agent(
   agentName: "gan-generator",
   prompt: "根据 evaluator 反馈改进：\n反馈文件：.copilot/state/conductor/gan-feedback.md\n\n改进要求：\n1. 优先修复评分最低的维度\n2. 保持已通过的功能不变\n3. 更新 .copilot/state/conductor/gan-features/ 中的实现文件",
   description: "GAN iteration improvement"
 )
 
 // 再次评估
-runSubagent(
+agent(
   agentName: "gan-evaluator",
   prompt: "重新评估改进后的应用...",
   description: "GAN re-evaluation"

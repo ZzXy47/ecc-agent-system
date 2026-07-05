@@ -27,7 +27,7 @@ Conductor（总指挥）
   │   └→ 运维层（9 Agent）
   ├→ Rule 注入（114+ 规则，按语言自动匹配）
   ├→ Skill 注入（150+ Skill，按任务类型加载）
-  ├→ 执行（runSubagent 调度）
+  ├→ 执行（agent 调度）
   ├→ 质量门禁（6 个 Hook）
   │   ├→ gateguard — 编辑/写入前事实收集
   │   ├→ safety-guard — 危险命令拦截
