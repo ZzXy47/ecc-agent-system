@@ -336,14 +336,14 @@ agent(
 ```
 // 前置任务完成后，将结果写入状态文件
 create_file(
-  filePath: ".copilot/state/conductor/task-{id}-result.md",
+  filePath: "/Users/jh/.copilot/state/conductor/task-{id}-result.md",
   content: "任务结果摘要..."
 )
 
 // 后续任务读取状态文件
 agent(
   agentName: "...",
-  prompt: "前置结果在 .copilot/state/conductor/task-{id}-result.md 中，请先读取..."
+  prompt: "前置结果在 /Users/jh/.copilot/state/conductor/task-{id}-result.md 中，请先读取..."
 )
 ```
 
@@ -359,25 +359,25 @@ agent(
 // Step 1: 根据目标语言/框架确定相关规则
 // 映射表: 语言 → 规则文件路径
 const ruleMap = {
-  "typescript": [".claude/rules/ecc/typescript/coding-style.md", ".claude/rules/ecc/typescript/security.md", ".claude/rules/ecc/typescript/testing.md"],
-  "python": [".claude/rules/ecc/python/coding-style.md", ".claude/rules/ecc/python/security.md", ".claude/rules/ecc/python/testing.md"],
-  "react": [".claude/rules/ecc/react/coding-style.md", ".claude/rules/ecc/react/hooks.md", ".claude/rules/ecc/react/testing.md"],
-  "vue": [".claude/rules/ecc/vue/coding-style.md", ".claude/rules/ecc/vue/patterns.md"],
-  "angular": [".claude/rules/ecc/angular/coding-style.md", ".claude/rules/ecc/angular/patterns.md"],
-  "go": [".claude/rules/ecc/golang/coding-style.md", ".claude/rules/ecc/golang/security.md"],
-  "rust": [".claude/rules/ecc/rust/coding-style.md", ".claude/rules/ecc/rust/security.md"],
-  "java": [".claude/rules/ecc/java/coding-style.md", ".claude/rules/ecc/java/security.md"],
-  "kotlin": [".claude/rules/ecc/kotlin/coding-style.md", ".claude/rules/ecc/kotlin/security.md"],
-  "swift": [".claude/rules/ecc/swift/coding-style.md", ".claude/rules/ecc/swift/security.md"],
-  "cpp": [".claude/rules/ecc/cpp/coding-style.md", ".claude/rules/ecc/cpp/security.md"],
-  "csharp": [".claude/rules/ecc/csharp/coding-style.md", ".claude/rules/ecc/csharp/security.md"],
-  "php": [".claude/rules/ecc/php/coding-style.md", ".claude/rules/ecc/php/security.md"],
-  "dart": [".claude/rules/ecc/dart/coding-style.md", ".claude/rules/ecc/dart/security.md"],
-  "fsharp": [".claude/rules/ecc/fsharp/coding-style.md", ".claude/rules/ecc/fsharp/security.md"]
+  "typescript": ["/Users/jh/.claude/rules/ecc/typescript/coding-style.md", "/Users/jh/.claude/rules/ecc/typescript/security.md", "/Users/jh/.claude/rules/ecc/typescript/testing.md"],
+  "python": ["/Users/jh/.claude/rules/ecc/python/coding-style.md", "/Users/jh/.claude/rules/ecc/python/security.md", "/Users/jh/.claude/rules/ecc/python/testing.md"],
+  "react": ["/Users/jh/.claude/rules/ecc/react/coding-style.md", "/Users/jh/.claude/rules/ecc/react/hooks.md", "/Users/jh/.claude/rules/ecc/react/testing.md"],
+  "vue": ["/Users/jh/.claude/rules/ecc/vue/coding-style.md", "/Users/jh/.claude/rules/ecc/vue/patterns.md"],
+  "angular": ["/Users/jh/.claude/rules/ecc/angular/coding-style.md", "/Users/jh/.claude/rules/ecc/angular/patterns.md"],
+  "go": ["/Users/jh/.claude/rules/ecc/golang/coding-style.md", "/Users/jh/.claude/rules/ecc/golang/security.md"],
+  "rust": ["/Users/jh/.claude/rules/ecc/rust/coding-style.md", "/Users/jh/.claude/rules/ecc/rust/security.md"],
+  "java": ["/Users/jh/.claude/rules/ecc/java/coding-style.md", "/Users/jh/.claude/rules/ecc/java/security.md"],
+  "kotlin": ["/Users/jh/.claude/rules/ecc/kotlin/coding-style.md", "/Users/jh/.claude/rules/ecc/kotlin/security.md"],
+  "swift": ["/Users/jh/.claude/rules/ecc/swift/coding-style.md", "/Users/jh/.claude/rules/ecc/swift/security.md"],
+  "cpp": ["/Users/jh/.claude/rules/ecc/cpp/coding-style.md", "/Users/jh/.claude/rules/ecc/cpp/security.md"],
+  "csharp": ["/Users/jh/.claude/rules/ecc/csharp/coding-style.md", "/Users/jh/.claude/rules/ecc/csharp/security.md"],
+  "php": ["/Users/jh/.claude/rules/ecc/php/coding-style.md", "/Users/jh/.claude/rules/ecc/php/security.md"],
+  "dart": ["/Users/jh/.claude/rules/ecc/dart/coding-style.md", "/Users/jh/.claude/rules/ecc/dart/security.md"],
+  "fsharp": ["/Users/jh/.claude/rules/ecc/fsharp/coding-style.md", "/Users/jh/.claude/rules/ecc/fsharp/security.md"]
 }
 
 // Step 2: 读取相关规则文件
-read_file(filePath: ".claude/rules/ecc/{lang}/coding-style.md", startLine: 1, endLine: 100)
+read_file(filePath: "/Users/jh/.claude/rules/ecc/{lang}/coding-style.md", startLine: 1, endLine: 100)
 
 // Step 3: 将规则摘要注入任务信封
 agent(
@@ -393,27 +393,27 @@ agent(
 // Step 1: 根据任务类型确定相关 Skill
 // 映射表: 任务类型 → Skill 文件路径
 const skillMap = {
-  "api-design": ".copilot/skills/api-design/SKILL.md",
-  "react-patterns": ".copilot/skills/react-patterns/SKILL.md",
-  "vue-patterns": ".copilot/skills/vue-patterns/SKILL.md",
-  "angular-developer": ".copilot/skills/angular-developer/SKILL.md",
-  "python-patterns": ".copilot/skills/python-patterns/SKILL.md",
-  "fastapi-patterns": ".copilot/skills/fastapi-patterns/SKILL.md",
-  "django-tdd": ".copilot/skills/django-tdd/SKILL.md",
-  "golang-testing": ".copilot/skills/golang-testing/SKILL.md",
-  "rust-patterns": ".copilot/skills/rust-patterns/SKILL.md",
-  "springboot-tdd": ".copilot/skills/springboot-tdd/SKILL.md",
-  "docker-patterns": ".copilot/skills/docker-patterns/SKILL.md",
-  "kubernetes-patterns": ".copilot/skills/kubernetes-patterns/SKILL.md",
-  "database-migrations": ".copilot/skills/database-migrations/SKILL.md",
-  "e2e-testing": ".copilot/skills/e2e-testing/SKILL.md",
-  "error-handling": ".copilot/skills/error-handling/SKILL.md",
-  "security-scan": ".copilot/skills/security-scan/SKILL.md",
-  "performance-optimizer": ".copilot/skills/performance-optimizer/SKILL.md"
+  "api-design": "/Users/jh/.copilot/skills/api-design/SKILL.md",
+  "react-patterns": "/Users/jh/.copilot/skills/react-patterns/SKILL.md",
+  "vue-patterns": "/Users/jh/.copilot/skills/vue-patterns/SKILL.md",
+  "angular-developer": "/Users/jh/.copilot/skills/angular-developer/SKILL.md",
+  "python-patterns": "/Users/jh/.copilot/skills/python-patterns/SKILL.md",
+  "fastapi-patterns": "/Users/jh/.copilot/skills/fastapi-patterns/SKILL.md",
+  "django-tdd": "/Users/jh/.copilot/skills/django-tdd/SKILL.md",
+  "golang-testing": "/Users/jh/.copilot/skills/golang-testing/SKILL.md",
+  "rust-patterns": "/Users/jh/.copilot/skills/rust-patterns/SKILL.md",
+  "springboot-tdd": "/Users/jh/.copilot/skills/springboot-tdd/SKILL.md",
+  "docker-patterns": "/Users/jh/.copilot/skills/docker-patterns/SKILL.md",
+  "kubernetes-patterns": "/Users/jh/.copilot/skills/kubernetes-patterns/SKILL.md",
+  "database-migrations": "/Users/jh/.copilot/skills/database-migrations/SKILL.md",
+  "e2e-testing": "/Users/jh/.copilot/skills/e2e-testing/SKILL.md",
+  "error-handling": "/Users/jh/.copilot/skills/error-handling/SKILL.md",
+  "security-scan": "/Users/jh/.copilot/skills/security-scan/SKILL.md",
+  "performance-optimizer": "/Users/jh/.copilot/skills/performance-optimizer/SKILL.md"
 }
 
 // Step 2: 读取相关 Skill 文件
-read_file(filePath: ".copilot/skills/{skill-name}/SKILL.md", startLine: 1, endLine: 80)
+read_file(filePath: "/Users/jh/.copilot/skills/{skill-name}/SKILL.md", startLine: 1, endLine: 80)
 
 // Step 3: 将 Skill 摘要注入任务信封
 agent(
@@ -785,13 +785,13 @@ agent(
 )
 // 等待规划完成后，将结果写入状态文件
 create_file(
-  filePath: ".copilot/state/conductor/plan-result.md",
+  filePath: "/Users/jh/.copilot/state/conductor/plan-result.md",
   content: "{planner 返回的计划}"
 )
 // 第二步：基于规划结果分发实现任务
 agent(
   agentName: "build-error-resolver",
-  prompt: "根据 .copilot/state/conductor/plan-result.md 中的计划，实现登录功能",
+  prompt: "根据 /Users/jh/.copilot/state/conductor/plan-result.md 中的计划，实现登录功能",
   description: "Implement login feature"
 )
 ```
@@ -1210,7 +1210,7 @@ Conductor 在并行执行时必须维护实时状态：
    - 失败的任务和原因
    - 已完成的任务清单
    - 建议的人工介入步骤
-4. **保留工作** — 将已完成的产出保存到 `.claude/artifacts/` 目录
+4. **保留工作** — 将已完成的产出保存到 `/Users/jh/.copilot/artifacts/` 目录
 
 ### 恢复验证
 
@@ -1537,27 +1537,27 @@ GAN（Generative Adversarial Network）工作流由三个 Agent 组成：
 // Step 1: gan-planner 生成产品规格
 agent(
   agentName: "gan-planner",
-  prompt: "将以下需求扩展为完整产品规格：\n{用户需求}\n\n输出格式：\n1. 功能清单（按优先级排序）\n2. 每个功能的验收标准\n3. 技术栈建议\n4. 里程碑计划\n\n将结果写入 .copilot/state/conductor/gan-spec.md",
+  prompt: "将以下需求扩展为完整产品规格：\n{用户需求}\n\n输出格式：\n1. 功能清单（按优先级排序）\n2. 每个功能的验收标准\n3. 技术栈建议\n4. 里程碑计划\n\n将结果写入 /Users/jh/.copilot/state/conductor/gan-spec.md",
   description: "GAN product specification"
 )
 
 // Step 2: 读取 planner 输出，传递给 generator
 create_file(
-  filePath: ".copilot/state/conductor/gan-spec.md",
+  filePath: "/Users/jh/.copilot/state/conductor/gan-spec.md",
   content: "{gan-planner 返回的规格}"
 )
 
 // Step 3: gan-generator 按规格实现（迭代循环）
 agent(
   agentName: "gan-generator",
-  prompt: "根据以下产品规格实现功能：\n规格文件：.copilot/state/conductor/gan-spec.md\n\n实现要求：\n1. 按优先级顺序实现\n2. 每个功能完成后写入 .copilot/state/conductor/gan-features/{feature-name}.md\n3. 运行开发服务器确认可用\n\n如需参考 evaluator 反馈，读取 .copilot/state/conductor/gan-feedback.md",
+  prompt: "根据以下产品规格实现功能：\n规格文件：/Users/jh/.copilot/state/conductor/gan-spec.md\n\n实现要求：\n1. 按优先级顺序实现\n2. 每个功能完成后写入 /Users/jh/.copilot/state/conductor/gan-features/{feature-name}.md\n3. 运行开发服务器确认可用\n\n如需参考 evaluator 反馈，读取 /Users/jh/.copilot/state/conductor/gan-feedback.md",
   description: "GAN feature implementation"
 )
 
 // Step 4: gan-evaluator 测试并评分
 agent(
   agentName: "gan-evaluator",
-  prompt: "测试以下应用并评分：\n规格文件：.copilot/state/conductor/gan-spec.md\n实现状态：.copilot/state/conductor/gan-features/\n\n评估要求：\n1. 使用 Playwright 测试核心用户路径\n2. 对照规格中的验收标准逐项评分\n3. 将评分和改进建议写入 .copilot/state/conductor/gan-feedback.md\n\n评分格式：\n- 功能完整性: X/10\n- 用户体验: X/10\n- 代码质量: X/10\n- 测试覆盖: X/10\n- 总分: X/40",
+  prompt: "测试以下应用并评分：\n规格文件：/Users/jh/.copilot/state/conductor/gan-spec.md\n实现状态：/Users/jh/.copilot/state/conductor/gan-features/\n\n评估要求：\n1. 使用 Playwright 测试核心用户路径\n2. 对照规格中的验收标准逐项评分\n3. 将评分和改进建议写入 /Users/jh/.copilot/state/conductor/gan-feedback.md\n\n评分格式：\n- 功能完整性: X/10\n- 用户体验: X/10\n- 代码质量: X/10\n- 测试覆盖: X/10\n- 总分: X/40",
   description: "GAN quality evaluation"
 )
 ```
@@ -1567,7 +1567,7 @@ agent(
 ```
 // 评估完成后，检查是否需要迭代
 read_file(
-  filePath: ".copilot/state/conductor/gan-feedback.md",
+  filePath: "/Users/jh/.copilot/state/conductor/gan-feedback.md",
   startLine: 1,
   endLine: 50
 )
@@ -1576,7 +1576,7 @@ read_file(
 // 将 feedback 注入 generator 的下一轮 prompt
 agent(
   agentName: "gan-generator",
-  prompt: "根据 evaluator 反馈改进：\n反馈文件：.copilot/state/conductor/gan-feedback.md\n\n改进要求：\n1. 优先修复评分最低的维度\n2. 保持已通过的功能不变\n3. 更新 .copilot/state/conductor/gan-features/ 中的实现文件",
+  prompt: "根据 evaluator 反馈改进：\n反馈文件：/Users/jh/.copilot/state/conductor/gan-feedback.md\n\n改进要求：\n1. 优先修复评分最低的维度\n2. 保持已通过的功能不变\n3. 更新 /Users/jh/.copilot/state/conductor/gan-features/ 中的实现文件",
   description: "GAN iteration improvement"
 )
 
@@ -1593,7 +1593,7 @@ agent(
 ### 状态文件结构
 
 ```
-.copilot/state/conductor/
+/Users/jh/.copilot/state/conductor/
 ├── gan-spec.md           # gan-planner 输出的产品规格
 ├── gan-feedback.md       # gan-evaluator 输出的评分和反馈
 ├── gan-features/         # gan-generator 输出的实现文件
